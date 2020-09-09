@@ -6,7 +6,9 @@
     <title>Document</title>
 </head>
 <body>
-<canvas id="canvas" width="1000" height="600" style="border:#000 solid 1px;" />
+<canvas id="canvas" width="600" height="600" style="border:#000 solid 1px;" />
+<input id="color" tye="color" oninput="canvascolor(this.value);">
+<input id="grosor" tye="range" oninput="canvasgrosor(this.value);" min="1" max="10" value="1">
 <script src="..\js\tp1.js"></script>
 </body>
 </html>
