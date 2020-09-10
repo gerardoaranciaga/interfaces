@@ -1,5 +1,6 @@
-let ctx = document.querySelector("#canvas").getContext("2d");
-let rect = ctx.getBoundingClientRect();
+let canvas = document.querySelector("#canvas");
+let ctx = canvas.getContext("2d");
+let rect = canvas.getBoundingClientRect();
 let x = 0; y = 0; dibujando = false; color = "black"; grosor = 1;
 
 function canvascolor(e){
@@ -10,13 +11,13 @@ function canvasgrosor(e){
     grosor = e;
 }
 
-ctx.addEventListener("mousedown",function(e){
+canvas.addEventListener("mousedown",function(e){
     x = e.clientX - rect.left;
     y = e.clientY - rect.top;
     dibujando = true;
 })
 
-ctx.addEventListener("mousemove",function(e){
+canvas.addEventListener("mousemove",function(e){
     if(dibujando === true){
         dibujar(x,y,e.clientX - rect.left,e.clientY - rect.top);
     }
@@ -24,7 +25,7 @@ ctx.addEventListener("mousemove",function(e){
     y = e.clientY - rect.top;
 })
 
-ctx.addEventListener("mouseup",function(e){
+canvas.addEventListener("mouseup",function(e){
     if(dibujando === true){
         dibujar(x,y,e.clientX - rect.left,e.clientY - rect.top);
     }
