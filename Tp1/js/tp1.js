@@ -4,8 +4,9 @@ let rect = canvas.getBoundingClientRect();
 let x = 0; y = 0; dibujando = false; color = "black"; grosor = 1; a = 255;
 ctx.lineWidth = 1;
 let foto = document.querySelector("#foto");
-let imagenbrillo = "";
-
+let imagenauxiliar = "";
+let binarizacion = false;
+let gris = false;
 let imageData = ctx.createImageData(500,500);
 
 
@@ -13,7 +14,7 @@ let imageData = ctx.createImageData(500,500);
 function limpiar(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     document.querySelector("#foto").value = "";
-    imagenbrillo = "";
+    imagenauxiliar = "";
 }
 
 function dibujar(e){
@@ -84,17 +85,17 @@ document.querySelector("#negativo").addEventListener("click",function(){
 })
 
 document.querySelector("#brillo").addEventListener("click",function(){
-    if(imagenbrillo == ""){
+    if(imagenauxiliar == ""){
         let imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
-        imagenbrillo = imageData;
+        imagenauxiliar = imageData;
     }
     let indicebrillo = document.querySelector("#brilloinput").value;
-    indicebrillo = indicebrillo * 0.1;
+    indicebrillo = indicebrillo * 0.05;
     for(x = 0; x < canvas.width; x ++){
         for(y = 0; y < canvas.height; y ++){
-            let r = getRed(imagenbrillo,x,y);
-            let g = getGreen(imagenbrillo,x,y);
-            let b = getBlue(imagenbrillo,x,y);
+            let r = getRed(imagenauxiliar,x,y);
+            let g = getGreen(imagenauxiliar,x,y);
+            let b = getBlue(imagenauxiliar,x,y);
             let r2 = r * indicebrillo;
             let g2 = g * indicebrillo;
             let b2 = b * indicebrillo;
@@ -104,18 +105,66 @@ document.querySelector("#brillo").addEventListener("click",function(){
     ctx.putImageData(imageData,0,0);
 })
 
-document.querySelector("#gris").addEventListener("click",function(){
-    let imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
-    for(x = 0; x < canvas.width; x ++){
-        for(y = 0; y < canvas.height; y ++){
-            let r = getRed(imageData,x,y);
-            let g = getGreen(imageData,x,y);
-            let b = getBlue(imageData,x,y);
-            let grey = (r+g+b)/3;
-            setPixel(imageData,x,y,grey,grey,grey,a);
+document.querySelector("#binarizacion").addEventListener("click",function(){
+    if(binarizacion == false){
+        let imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+        imagenauxiliar = imageData;
+        let umbral = 60;
+        for(x = 0; x < canvas.width; x ++){
+            for(y = 0; y < canvas.height; y ++){
+                let r = getRed(imageData,x,y);
+                let g = getGreen(imageData,x,y);
+                let b = getBlue(imageData,x,y);
+                let binario = 0;
+                if ((r * 0.3 + g * 0.59 + b * 0.11) > umbral){
+                    binario = 255;
+                }
+                setPixel(imageData,x,y,binario,binario,binario,a);
+            }
         }
+        binarizacion = true;
+        ctx.putImageData(imageData,0,0);
+    }else{
+        for(x = 0; x < canvas.width; x ++){
+            for(y = 0; y < canvas.height; y ++){
+                let r = getRed(imagenauxiliar,x,y);
+                let g = getGreen(imagenauxiliar,x,y);
+                let b = getBlue(imagenauxiliar,x,y);
+                setPixel(imageData,x,y,r,g,b,a);
+            }
+        }
+        binarizacion = false;
+        ctx.putImageData(imageData,0,0);
     }
-    ctx.putImageData(imageData,0,0);
+})
+
+document.querySelector("#gris").addEventListener("click",function(){
+    if(gris == false){
+        let imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+        imagenauxiliar = imageData;
+        for(x = 0; x < canvas.width; x ++){
+            for(y = 0; y < canvas.height; y ++){
+                let r = getRed(imageData,x,y);
+                let g = getGreen(imageData,x,y);
+                let b = getBlue(imageData,x,y);
+                let grey = (r+g+b)/3;
+                setPixel(imageData,x,y,grey,grey,grey,a);
+            }
+        }
+        gris = true;
+        ctx.putImageData(imageData,0,0);
+    }else{
+        for(x = 0; x < canvas.width; x ++){
+            for(y = 0; y < canvas.height; y ++){
+                let r = getRed(imagenauxiliar,x,y);
+                let g = getGreen(imagenauxiliar,x,y);
+                let b = getBlue(imagenauxiliar,x,y);
+                setPixel(imageData,x,y,r,g,b,a);
+            }
+        }
+        gris = false;
+        ctx.putImageData(imageData,0,0);
+    }
 })
 
 function setPixel(imageData,x,y,r,g,b,a){
