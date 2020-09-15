@@ -17,12 +17,16 @@
             <canvas id="canvas" width="500" height="500" style="border:#000 solid 4px;"></canvas><br>
         </div>
         <div>
-            <div style="border-radius: 15px; border: yellow solid 3px; text-align: center;">
-                <input id="foto" type="file" value="Archivo">
-            </div><br>
             <div style="border-radius: 15px; border: violet solid 3px; text-align: center;">
                 <input id="color" type="color" oninput="canvascolor(this.value);">
                 <input id="grosor" type="range" oninput="canvasgrosor(this.value);" min="1" max="10" value="1"><br>
+                <button id="lapiz">Lapiz</button>
+            </div><br>
+            <div style="border-radius: 15px; border: brown solid 3px; text-align: center;">
+                <button id="goma">Goma</button>
+            </div><br>
+            <div style="border-radius: 15px; border: yellow solid 3px; text-align: center;">
+                <input id="foto" type="file" value="Archivo">
             </div><br>
             <div style="border-radius: 15px; border: orange solid 3px; text-align: center;">
                 <button id="limpiar">Limpiar</button>
@@ -31,14 +35,13 @@
                 <button id="negativo">Negativo</button>
             </div><br>
             <div style="border-radius: 15px; border: blue solid 3px; text-align: center;">
-                <input id="brilloinput" type="range" min="20" max="60" value="1">
+                <input id="brilloinput" type="range" min="-20" max="60" value="20">
                 <button id="brillo">Brillo</button>
             </div><br>
             <div style="border-radius: 15px; border: red solid 3px; text-align: center;">
                 <button id="binarizacion">Binarización</button>
             </div><br>
             <div style="border-radius: 15px; border:green solid 3px; text-align: center;">
-                <input id="sepiainput" type="range" min="1" max="100" value="1">
                 <button id="sepia">Sepia</button>
             </div><br>
             <div style="border-radius: 15px; border: grey solid 3px; text-align: center;">
