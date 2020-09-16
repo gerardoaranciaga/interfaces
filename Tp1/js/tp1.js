@@ -1,7 +1,7 @@
 let canvas = document.querySelector("#canvas");
 let ctx = canvas.getContext("2d");
 let rect = canvas.getBoundingClientRect();
-let imageData = ctx.createImageData(500,500);
+let imageData = ctx.createImageData(800,500);
 let x = 0; y = 0; dibujando = false; color = "black"; grosor = 1; a = 255;
 ctx.lineWidth = 1;
 let foto = document.querySelector("#foto");
@@ -46,6 +46,13 @@ document.querySelector("#lapiz").addEventListener("click",function(){
     ctx.lineWidth = 1;
 })
 
+document.querySelector("#guardar").addEventListener("click",function(){        
+    let link = document.createElement('a');
+    link.href = canvas.toDataURL("imagen/png");
+    link.download = "Imagen.png";
+    link.click();
+})
+
 canvas.addEventListener("mousemove",dibujar);
 
 canvas.addEventListener("mousedown",function(){
@@ -77,8 +84,6 @@ foto.onchange = e => {
         image.src = content;
         image.onload = function () {
             let imageAspectRatio = (1.0 * this.height) / this.width;
-            console.log("1: "+1.0 * this.height);
-            console.log("2: "+this.width);
             let imageScaledWidth = canvas.width;
             let imageScaledHeight = canvas.width * imageAspectRatio;
             ctx.drawImage(this, 0, 0, imageScaledWidth, imageScaledHeight);
@@ -135,7 +140,7 @@ document.querySelector("#binarizacion").addEventListener("click",function(){
                 let g = getGreen(imageData,x,y);
                 let b = getBlue(imageData,x,y);
                 let binario = 0;
-                if ((r * 0.3 + g * 0.59 + b * 0.11) > umbral){
+                if (((r + g + b)/3) > 127.5){
                     binario = 255;
                 }
                 setPixel(imageData,x,y,binario,binario,binario,a);
@@ -221,8 +226,8 @@ document.querySelector("#sepia").addEventListener("click",function(){
                 setPixel(imageData,x,y,r,g,b,a);
             }
         }
-        sepia = false;
         ctx.putImageData(imageData,0,0);
+        sepia = false;
     }
 })
 
