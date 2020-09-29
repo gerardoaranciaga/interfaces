@@ -97,7 +97,9 @@ function buscarFichaClickeada(x,y){
 }
 
 canvas.addEventListener("mousedown",function(e){
-    fichaClickeada = buscarFichaClickeada(e.layerX,e.layerY);
+    let x = e.layerX;
+    let y = e.layerY;
+    fichaClickeada = buscarFichaClickeada(x,y);
     if(fichaClickeada != null){
         moviendo = true;
         posOriginalX = fichaClickeada.getPosX();
@@ -178,6 +180,7 @@ function ganadorEs(){
 }
 
 function volverFichaClickeada(){
+    fichaClickeada.offsetOff();
     fichaClickeada.setPosX(posOriginalX);
     posOriginalX = null;
     fichaClickeada.setPosY(posOriginalY);
