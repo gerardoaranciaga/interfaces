@@ -5,7 +5,10 @@ class Tablero{
         this.matrizTablero = [];
         this.filas = 6;
         this.columnas = 7;
-        this.inicMatriz();
+        this.colorFicha1;
+        this.colorFicha2;
+        this.radio = 35;
+        this.inicMatriz();    
         this.posiciones = [377,467,557,647,737,827,917];
     }
 
@@ -18,7 +21,7 @@ class Tablero{
         }
         console.table(this.matrizTablero);
     }
-    
+
     draw(){
         this.context.fillStyle = "rgb(8, 7, 48)";
         this.context.beginPath();
@@ -35,15 +38,22 @@ class Tablero{
         this.context.moveTo(1050,0);
         this.context.lineTo(1050,canvas.height);
         this.context.stroke();
-        this.context.closePath();
         let x = 377;
         let y = 93;
         for(let i = 0; i < 6; i++){
             for(let j = 0; j < 7; j++){
                 this.context.beginPath();
-                this.context.fillStyle = "rgb(255, 255, 255, 1)";
-                this.context.arc(x,y,35,0,2*Math.PI);
-                this.context.fill();
+                if(this.matrizTablero[i][j] == "j1"){
+                    this.context.drawImage(this.colorFicha1, x - this.radio, y - this.radio, this.radio *2 , this.radio *2 );
+                }else{
+                    if(this.matrizTablero[i][j] == "j2"){
+                        this.context.drawImage(this.colorFicha2, x - this.radio, y - this.radio, this.radio *2 , this.radio *2 );
+                    }else{
+                        this.context.fillStyle = "rgb(255, 255, 255, 1)";
+                        this.context.arc(x,y,35,0,2*Math.PI);
+                        this.context.fill();
+                    }
+                }
                 this.context.closePath();
                 x += 90;
            }
@@ -55,10 +65,10 @@ class Tablero{
             this.context.fillStyle = "rgb(50, 50, 50, 1)";
             this.context.arc(this.posiciones[i],30,10,0,2*Math.PI);
             this.context.fill();
-            this.context.closePath();
         }
+        this.context.closePath();
     }
-
+    
     estaAdentro(x,y){
         let _x = this.posX -30;
         let _y = 30 - y;
@@ -83,10 +93,19 @@ class Tablero{
         return null;
     }
 
+    setMatrizTablero(matriz){
+        this.matrizTablero = matriz;
+    }
 
+    resetTablero(){
+        this.inicMatriz();
+    }
 
+    setColorFicha1(img){
+        this.colorFicha1 = img;
+    }
 
-
-
-
+    setColorFicha2(img){
+        this.colorFicha2 = img;
+    }
 }

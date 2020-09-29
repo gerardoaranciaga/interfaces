@@ -14,10 +14,8 @@ class Ficha{
     }
 
     draw(){
-        this.context.fillStyle = this.fill;
         this.context.beginPath();
-        this.context.arc(this.posX-this.offsetX,this.posY-this.offsetY,this.radio,0,2*Math.PI);
-        this.context.fill();
+        this.context.drawImage(this.fill, this.posX - this.radio - this.offsetX, this.posY - this.radio - this.offsetY, this.radio *2 , this.radio *2 );
         if(this.seleccionada === true){
             this.context.strokeStyle = this.colorSeleccion;
             this.context.lineWidth = 5;

@@ -6,13 +6,24 @@ let fichaClickeada = null;
 
 let tablero = new Tablero(ctx);
 let juego1 = new Juego();
+let ganador = "nadie";
 const maxFichas = 50;
 const sectorFichas1 = 250;
 const sectorFichas2 = 1050;
 const tamañoFicha = 35;
 let fichas = [];
+let posOriginalX;
+let posOriginalY;
 
-inciarTablero();
+let imagenj1 = new Image();
+let imagenj2 = new Image();
+imagenj1.src = "../img/aguila.png";
+imagenj1.onload = () => {
+    imagenj2.src = "../img/raro.png"
+    imagenj2.onload = () => {
+        inciarTablero();
+    }
+}
 
 function addFicha(){
     let jugador;
@@ -26,7 +37,7 @@ function addFicha(){
     }
     if(fichas.length < (maxFichas/2)){
         jugador = "j1";
-        color = "blue";
+        color = imagenj1;
         posX = Math.round(Math.random() * (sectorFichas1));
         if(posX < tamañoFicha){
             posX += tamañoFicha;
@@ -35,7 +46,7 @@ function addFicha(){
         }
     }else{
         jugador = "j2";
-        color = "green";
+        color = imagenj2;
         posX = Math.round(Math.random() * (canvas.width - sectorFichas2) + sectorFichas2);
         if(posX < sectorFichas2 + tamañoFicha){
             posX += tamañoFicha;
@@ -48,19 +59,6 @@ function addFicha(){
 }
 
 
-function colorFicha(){
-    ctx.beginPath();
-    let img = new Image();
-    img.src = "../img/aguila.png";
-    //let imagen = ctx.createPattern(img,"repeat");
-    //ctx.arc(700,300,35,0,2*Math.PI);
-    //ctx.rect(0, 0, 150, 100);
-    //ctx.fillStyle = imagen;
-    //ctx.fill();
-    img.onload = ctx.arc(20,20,35,0,2*Math.PI);
-    ctx.fillStyle = img;
-    ctx.closePath();
-}
 
 function drawFichas(){
     clearCanvas();
@@ -72,24 +70,9 @@ function drawFichas(){
 function inciarTablero(){
     addFichas();
     drawFichas();
+    tablero.setColorFicha1(imagenj1);
+    tablero.setColorFicha2(imagenj2);
     tablero.draw();
-    //colorFicha();
-}
-
-function drawTablero(){
-    drawSectorFichas();
-    colorFicha();
-}
-
-function drawSectorFichas(){
-    ctx.beginPath();
-    ctx.lineWidth = 2;
-    ctx.moveTo(sectorFichas1,0);
-    ctx.lineTo(sectorFichas1,canvas.height);
-    ctx.moveTo(sectorFichas2,0);
-    ctx.lineTo(sectorFichas2,canvas.height);
-    ctx.stroke();
-    ctx.closePath();
 }
 
 function clearCanvas(){
@@ -101,14 +84,6 @@ function addFichas(){
     for(i = 0; i < maxFichas; i++){
         addFicha();
     }
-}
-
-function randomRGBA(){
-    let r = Math.round(Math.random() * 255);
-    let g = Math.round(Math.random() * 255);
-    let b = Math.round(Math.random() * 255);
-    let a = 255;
-    return `rgb(${r},${g},${b},${a})`;
 }
 
 function buscarFichaClickeada(x,y){
@@ -125,6 +100,8 @@ canvas.addEventListener("mousedown",function(e){
     fichaClickeada = buscarFichaClickeada(e.layerX,e.layerY);
     if(fichaClickeada != null){
         moviendo = true;
+        posOriginalX = fichaClickeada.getPosX();
+        posOriginalY = fichaClickeada.getPosY();
     }
 });
 
@@ -144,8 +121,35 @@ canvas.addEventListener("mouseup",function(e){
     let posFicha = tablero.estaAdentro(x,y);
     if(posFicha != -1 && fichaClickeada != null){
         let jugador = fichaClickeada.getJugador();
-        juego1.insertarFicha(posFicha,jugador);
-        console.log("Pos ficha + "+posFicha);
+        console.log("jugador: "+jugador);
+        if(juego1.getTurno() == "cualquiera" || juego1.getTurno() == jugador){
+            juego1.insertarFicha(posFicha,jugador);
+            tablero.setMatrizTablero(juego1.getMatrizTablero());
+            let cont = 0;
+            while(cont < fichas.length){
+                if(fichas[cont] == fichaClickeada){
+                    fichas.splice(cont,1);
+                    cont = fichas.length + 1;
+                }
+                cont++;
+            }
+            if(jugador == "j1"){
+                juego1.setTurno("j2");
+            }else{
+                juego1.setTurno("j1");
+            }
+        }else{
+            alert("No es tu turno");
+            volverFichaClickeada();
+        }
+        if(juego1.getGano() != false){
+            ganador = juego1.getGano();
+            setTimeout(ganadorEs,5);
+            setTimeout(reiniciar,1000);
+            
+        }
+    }if(posFicha == -1 && fichaClickeada != null){
+        volverFichaClickeada();
     }
     moviendo = false;
     if(fichaClickeada != null){
@@ -153,7 +157,32 @@ canvas.addEventListener("mouseup",function(e){
         fichaClickeada.setSeleccionadaOff();
     }
     fichaClickeada = null;
+    drawFichas();
+    tablero.draw();
 });
+
+function reiniciar(){
+    tablero.resetTablero();
+    juego1.resetJuego();
+    fichas = [];
+    inciarTablero();
+}
+
+function ganadorEs(){
+    if(ganador == "j1"){
+        console.log(ganador);
+        alert("Ganó el jugador: Aguila");
+    }else{
+        alert("Ganó el jugador: Rayo");
+    }
+}
+
+function volverFichaClickeada(){
+    fichaClickeada.setPosX(posOriginalX);
+    posOriginalX = null;
+    fichaClickeada.setPosY(posOriginalY);
+    posOriginalY = null;
+}
 
 
 

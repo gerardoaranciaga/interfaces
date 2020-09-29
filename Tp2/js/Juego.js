@@ -1,6 +1,8 @@
 class Juego{
 
     constructor(){
+        this.turno = "cualquiera";
+        this.gano = false;
         this.matrizTablero = [];
         this.filas = 6;
         this.columnas = 7;
@@ -26,19 +28,15 @@ class Juego{
             this.matrizTablero[i][posicion] = jugador;
             console.table(this.matrizTablero);
             this.verificarJuego(i,posicion,jugador);
+            return true;
         }
+        return false;
     }
 
     verificarJuego(y,x,jugador){
         let i = 0;
         let posInicialX = x;
         let posInicialY = y;
-        console.log("posincialx = "+posInicialX);
-        console.log("posincialy = "+posInicialY);
-        console.log("i = "+i);
-        console.log("x = "+x);
-        console.log("y = "+y);
-        console.log("mat = "+this.matrizTablero[y][x]);
         while(x > -1 && this.matrizTablero[y][x] == jugador && i < 4){ //Izquierda
             i++;
             x--;
@@ -65,11 +63,6 @@ class Juego{
                     x = posInicialX;
                     y = posInicialY;
                     while(y < 6 && this.matrizTablero[y][x] == jugador && i < 4){ //Abajo
-                        console.log("posincialx = "+posInicialX);
-                        console.log("posincialy = "+posInicialY);
-                        console.log("i = "+i);
-                        console.log("x = "+x);
-                        console.log("y = "+y);
                         i++;
                         y++;
                     }
@@ -102,22 +95,22 @@ class Juego{
                                     console.log("Nadie ganó");
                                 }
                             }else{
-                                console.log("Winner: "+jugador);
+                                this.gano = jugador;
                             }
                         }else{
-                            console.log("Winner: "+jugador);
+                            this.gano = jugador;
                         }
                     }else{
-                        console.log("Winner: "+jugador);
+                        this.gano = jugador;
                     }
                 }else{
-                    console.log("Winner: "+jugador);
+                    this.gano = jugador;
                 }
             }else{
-                console.log("Winner: "+jugador);
+                this.gano = jugador;
             }
         }else{
-            console.log("Winner: "+jugador);
+            this.gano = jugador;
         }
     }
 
@@ -125,8 +118,22 @@ class Juego{
         return this.matrizTablero;
     }
 
+    getTurno(){
+        return this.turno;
+    }
 
+    setTurno(jugador){
+        this.turno = jugador;
+    }
 
+    getGano(){
+        return this.gano;
+    }
 
+    resetJuego(){
+        this.inicMatriz();
+        this.turno = "cualquiera";
+        this.gano = false;
+    }
 
 }
