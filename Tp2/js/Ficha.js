@@ -1,5 +1,6 @@
 class Ficha{
-    constructor(posX,posY,radio,fill,context){
+
+    constructor(posX,posY,radio,fill,context,jugador){
         this.radio = radio;
         this.posX = posX;
         this.posY = posY;
@@ -9,6 +10,7 @@ class Ficha{
         this.colorSeleccion = "red";
         this.offsetX = 0;
         this.offsetY = 0;
+        this.jugador = jugador;
     }
 
     draw(){
@@ -19,6 +21,10 @@ class Ficha{
         if(this.seleccionada === true){
             this.context.strokeStyle = this.colorSeleccion;
             this.context.lineWidth = 5;
+            this.context.stroke();
+        }else{
+            this.context.strokeStyle = "black";
+            this.context.lineWidth = 1;
             this.context.stroke();
         }
         this.context.closePath();

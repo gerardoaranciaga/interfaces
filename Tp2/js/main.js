@@ -4,6 +4,8 @@ let ctx = canvas.getContext("2d");
 let moviendo = false;
 let fichaClickeada = null;
 
+let tablero = new Tablero(ctx);
+let juego1 = new Juego();
 const maxFichas = 50;
 const sectorFichas1 = 250;
 const sectorFichas2 = 1050;
@@ -13,14 +15,18 @@ let fichas = [];
 inciarTablero();
 
 function addFicha(){
+    let jugador;
     let posX = 0;
     let posY = Math.round(Math.random() * (canvas.height));
+    let color;
     if(posY < tamañoFicha){
         posY += tamañoFicha;
     }if(posY > canvas.height - tamañoFicha){
         posY -= tamañoFicha;
     }
     if(fichas.length < (maxFichas/2)){
+        jugador = "j1";
+        color = "blue";
         posX = Math.round(Math.random() * (sectorFichas1));
         if(posX < tamañoFicha){
             posX += tamañoFicha;
@@ -28,6 +34,8 @@ function addFicha(){
             posX -= tamañoFicha;
         }
     }else{
+        jugador = "j2";
+        color = "green";
         posX = Math.round(Math.random() * (canvas.width - sectorFichas2) + sectorFichas2);
         if(posX < sectorFichas2 + tamañoFicha){
             posX += tamañoFicha;
@@ -35,8 +43,7 @@ function addFicha(){
             posX -= tamañoFicha;
         }
     }
-    let color = randomRGBA();
-    let ficha = new Ficha(posX,posY,tamañoFicha,color,ctx);
+    let ficha = new Ficha(posX,posY,tamañoFicha,color,ctx,jugador);
     fichas.push(ficha);
 }
 
@@ -50,7 +57,8 @@ function colorFicha(){
     //ctx.rect(0, 0, 150, 100);
     //ctx.fillStyle = imagen;
     //ctx.fill();
-    img.onload = ctx.drawImage(img,700,300,900,400);
+    img.onload = ctx.arc(20,20,35,0,2*Math.PI);
+    ctx.fillStyle = img;
     ctx.closePath();
 }
 
@@ -63,11 +71,12 @@ function drawFichas(){
 
 function inciarTablero(){
     addFichas();
-    drawTablero();
+    drawFichas();
+    tablero.draw();
+    //colorFicha();
 }
 
 function drawTablero(){
-    drawFichas();
     drawSectorFichas();
     colorFicha();
 }
@@ -106,6 +115,7 @@ function buscarFichaClickeada(x,y){
     for(i = 0; i < fichas.length; i++){
         let ficha = fichas[i];
         if(ficha.estaAdentro(x,y)){
+            ficha.setSeleccionadaOn();
             return ficha;
         }
     }
@@ -123,7 +133,8 @@ canvas.addEventListener("mousemove",function(e){
     let y = e.layerY;
     if(moviendo == true){
         fichaClickeada.setPosXY(x,y);
-        drawTablero();  
+        drawFichas();
+        tablero.draw();  
     }
 });
 
@@ -131,6 +142,7 @@ canvas.addEventListener("mouseup",function(){
     moviendo = false;
     if(fichaClickeada != null){
         fichaClickeada.offsetOff();
+        fichaClickeada.setSeleccionadaOff();
     }
     fichaClickeada = null;
 });
