@@ -121,14 +121,14 @@ canvas.addEventListener("mouseup",function(e){
     let x = e.layerX;
     let y = e.layerY;
     let posFicha = tablero.estaAdentro(x,y);
-    if(posFicha != -1 && fichaClickeada != null){
+    if(posFicha != -1 && fichaClickeada != null){ // Pregunto si le dió al circulito donde se ingresa la ficha
         let jugador = fichaClickeada.getJugador();
         console.log("jugador: "+jugador);
-        if(juego1.getTurno() == "cualquiera" || juego1.getTurno() == jugador){
+        if(juego1.getTurno() == "cualquiera" || juego1.getTurno() == jugador){ // Pregunto si es el primer turno o si es el de el
             juego1.insertarFicha(posFicha,jugador);
-            tablero.setMatrizTablero(juego1.getMatrizTablero());
+            tablero.setMatrizTablero(juego1.getMatrizTablero()); // Uso la misma matriz del juego para dibujar el tablero
             let cont = 0;
-            while(cont < fichas.length){
+            while(cont < fichas.length){ // Para eliminar del arreglo la que ingreso al tablero
                 if(fichas[cont] == fichaClickeada){
                     fichas.splice(cont,1);
                     cont = fichas.length + 1;
