@@ -59,6 +59,30 @@ class Tablero{
         }
     }
 
+    estaAdentro(x,y){
+        let _x = this.posX -30;
+        let _y = 30 - y;
+        for(let i = 0; i < this.posiciones.length; i++){
+            _x = this.posiciones[i] -x;
+            if(Math.sqrt(_x * _x + _y * _y) < 10){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    insertarFicha(posicion,jugador){
+        let i = 5;
+        while(i >= 0 && this.matrizTablero[posicion][i] != -1){
+            i--;            
+        }
+        if(i >= 0){
+            this.matrizTablero[posicion][i] = jugador;
+            return {posicion,i};
+        }
+        return null;
+    }
+
 
 
 

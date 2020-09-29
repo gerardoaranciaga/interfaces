@@ -138,7 +138,15 @@ canvas.addEventListener("mousemove",function(e){
     }
 });
 
-canvas.addEventListener("mouseup",function(){
+canvas.addEventListener("mouseup",function(e){
+    let x = e.layerX;
+    let y = e.layerY;
+    let posFicha = tablero.estaAdentro(x,y);
+    if(posFicha != -1 && fichaClickeada != null){
+        let jugador = fichaClickeada.getJugador();
+        juego1.insertarFicha(posFicha,jugador);
+        console.log("Pos ficha + "+posFicha);
+    }
     moviendo = false;
     if(fichaClickeada != null){
         fichaClickeada.offsetOff();

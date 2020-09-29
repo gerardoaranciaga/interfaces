@@ -100,4 +100,8 @@ class Ficha{
     getFill(){
         return this.fill;
     }
+
+    getJugador(){
+        return this.jugador;
+    }
 }
